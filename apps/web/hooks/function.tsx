@@ -1,9 +1,10 @@
 
 import { Canvas, Circle, Group, IText, Line, PencilBrush, Rect, Triangle } from "fabric"
-import { randomUUID } from "crypto"
 export const handleRectangle = ({ canvas }: { canvas: Canvas }, socket: WebSocket) => {
+  const id =crypto.randomUUID()
   const rec_data = {
     type: "rectangle",
+    id,
     data: {
       width: 100,
       height: 100,
@@ -11,10 +12,12 @@ export const handleRectangle = ({ canvas }: { canvas: Canvas }, socket: WebSocke
       stroke: "white",
       left: 100,
       top: 100,
-      id:`rect_$`
-    }
+    },
+    timestamp:  Date.now()
   }
   const rect = new Rect(rec_data.data)
+  rect.set("id",id)
+  rect.set("timestamp",rec_data.timestamp)
   socket.send(JSON.stringify(rec_data))
   canvas.add(rect)
   canvas.setActiveObject(rect)
@@ -22,17 +25,22 @@ export const handleRectangle = ({ canvas }: { canvas: Canvas }, socket: WebSocke
 }
 
 export const handleCircle = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
+  const id = crypto.randomUUID()
   const cir_data = {
     type: "circle",
+    id,
     data: {
       radius: 50,
       fill: "",
       stroke: "white",
       left: 100,
       top: 200
-    }
+    },
+    timestamp:Date.now()
   }
   const circle = new Circle(cir_data.data)
+  circle.set("id",id)
+  circle.set("timestamp",cir_data.timestamp)
   socket.send(JSON.stringify(cir_data))
   canvas.add(circle)
   canvas.setActiveObject(circle)
@@ -40,6 +48,7 @@ export const handleCircle = ({ canvas }: { canvas: Canvas },socket:WebSocket) =>
 }
 
 export const handleArrow = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
+  const id = crypto.randomUUID()
   const x1 = 100, y1 = 100, x2 = 250, y2 = 200;
 
   // Create the line
@@ -69,6 +78,7 @@ export const handleArrow = ({ canvas }: { canvas: Canvas },socket:WebSocket) => 
   const triangle = new Triangle(triangledata);
 const data = {
   type:"arrow",
+  id,
   triangledata:triangledata,
   arrowdata:{
     left: 0,
@@ -83,13 +93,12 @@ const data = {
     selectable: false,
     evented: false,
   }},
+  timestamp:Date.now()
 }
   // Group line and arrowhead together
-  const arrow = new Group([line, triangle],{
-    left: 0,
-    top: 0,
-    selectable: true,
-  } );
+  const arrow = new Group([line, triangle],data.arrowdata );
+  arrow.set("id",data.id)
+  arrow.set("timestamp",data.timestamp)
   socket.send(JSON.stringify(data))
   canvas.add(arrow);
   canvas.setActiveObject(arrow);
@@ -97,8 +106,11 @@ const data = {
 }
 
 export const handleText = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
+  const id = crypto.randomUUID()
   const Text_data = {
     type: "text", 
+    id,
+    timestamp:Date.now(),
     data: {
       left: 150,
       top: 150,
@@ -110,13 +122,17 @@ export const handleText = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
     }
   }
   const text = new IText("text",Text_data.data);
+  text.set("id",Text_data.id)
+  text.set("timestamp",Text_data.timestamp)
   socket.send(JSON.stringify(Text_data))
   canvas.add(text);
   canvas.setActiveObject(text);
   canvas.renderAll();
 }
 
-export const handlePencil = ({ canvas }: { canvas: Canvas }, setdrawmode: any, drawmode: any) => {
+export const handlePencil = ({ canvas }: { canvas: Canvas }, setdrawmode: any, drawmode: any,socket:WebSocket) => {
+  const id = crypto.randomUUID()
+  const timestamp= Date.now()
   const newmode = !drawmode
   setdrawmode(newmode)
   canvas.isDrawingMode = newmode
@@ -124,16 +140,31 @@ export const handlePencil = ({ canvas }: { canvas: Canvas }, setdrawmode: any, d
     canvas.freeDrawingBrush = new PencilBrush(canvas)
     canvas.freeDrawingBrush.color = "#fff"
     canvas.freeDrawingBrush.width = 5
+    canvas.on("path:created",(opt)=>{
+      const path = opt.path;
+      path.set("id",id)
+      path.set("timestamp",timestamp)
+      socket.send(JSON.stringify({
+        type:"drawing",
+        timestamp,
+        id,
+        data:path.toObject()
+      }))
+    })
   }
 }
 
-export const handleEraser = ({ canvas }: { canvas: Canvas }) => {
+export const handleEraser = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
   const activeObject = canvas.getActiveObject();
-  const data = {
-    type:"erase",
-    data:activeObject
-  }
+  
   if (activeObject) {
+   const id = activeObject.get("id")
+   if(id){
+    socket.send(JSON.stringify({
+      type:"erase",
+      id
+    }))
+   }
     canvas.remove(activeObject);
     canvas.renderAll();
   }
