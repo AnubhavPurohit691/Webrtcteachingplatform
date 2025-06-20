@@ -7,14 +7,9 @@ interface User{
 }
 const user:User[]=[]
 
-interface MESSAGE{
-    type :string,
-    data:{
-        
-    }
-}
+
 export function handlesocket(message:string,ws:WebSocket){
-const data = JSON.parse(message)
+const data = JSON.parse(message) 
 
-
+ 
 }

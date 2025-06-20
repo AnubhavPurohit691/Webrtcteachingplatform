@@ -1,9 +1,11 @@
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
-import Canvapage from "../components/Canvapage";
+import Canvapage from "../componentpages/Canvapage";
 import { CookiesProvider } from "react-cookie";
-import ProtectedRoute from "../components/Protectionroute";
+import ProtectedRoute from "../componentpages/wrapper/Protectionroute";
+import InputBox from "../componentpages/InputBox";
+import Dashboard from "../componentpages/Dashboard";
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -24,10 +26,7 @@ const ThemeImage = (props: Props) => {
 export default function Home() {
   return (
     <div >
-      <ProtectedRoute>
-      <Canvapage/>
-      </ProtectedRoute>
-     
+      <Dashboard/>
     </div>
   );
 }
