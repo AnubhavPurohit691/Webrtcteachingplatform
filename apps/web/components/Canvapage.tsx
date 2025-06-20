@@ -5,6 +5,7 @@ import { FaRegSquare, FaRegCircle, FaRegDotCircle, FaPencilAlt, FaEraser, FaFont
 import { handleArrow, handleCircle, handleEraser, handlePencil, handleRectangle, handleText } from '../hooks/function';
 import { useSocket } from '../hooks/useSocket';
 
+
 const Canvapage = () => {
   const Canvaref = useRef<HTMLCanvasElement | null>(null)
   const [canvas, setCanvas] = useState<Canvas>()
@@ -41,7 +42,25 @@ const Canvapage = () => {
     }
   }, [])
 
-
+useEffect(()=>{
+  if(!socket&&!canvas)return
+if (canvas&&socket){
+      canvas.on("object:modified", (e) => {
+        const obj = e.target as FabricObject | null;
+        const newtimestamp = Date.now()
+        obj?.set("timestamp",newtimestamp)
+        if (obj ) {
+          // Send only serializable properties
+          socket.send(JSON.stringify({
+            type:"modification",
+            data: obj.toObject(),
+            id: obj.get('id'),
+            timestamp: obj.get("timestamp")
+          }))      
+      }
+    });
+}
+},[socket,canvas])
 
   useEffect(() => {
     if (!socket || !canvas) return;
@@ -70,7 +89,7 @@ const Canvapage = () => {
             canvas.renderAll()
             break;
           case "text":
-            const text = new IText(data.type, data.data);
+            const text = new IText(data.text, data.data);
             text.set("id",data.id)
             text.set("timestamp",data.timestamp)
             canvas.add(text)
@@ -98,6 +117,20 @@ const Canvapage = () => {
             const obj = getobject(canvas, data.id)
             if (obj) {
               canvas.remove(obj)
+              canvas.renderAll()
+            }
+            break;
+          case "modification":
+            const modifiedobj = getobject(canvas,data.id)
+            if (modifiedobj) {
+              // Only set serializable properties
+              Object.entries(data.data).forEach(([key, value]) => {
+                if (key !== 'type' && key !== 'version') {
+                  modifiedobj.set(key, value)
+                }
+              })
+              modifiedobj.set("timestamp",data.timestamp)
+              modifiedobj.setCoords();
               canvas.renderAll()
             }
             break;

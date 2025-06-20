@@ -109,6 +109,7 @@ export const handleText = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
   const id = crypto.randomUUID()
   const Text_data = {
     type: "text", 
+    text:"click here",
     id,
     timestamp:Date.now(),
     data: {
@@ -121,7 +122,7 @@ export const handleText = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
       editable: true, // default true for IText
     }
   }
-  const text = new IText("text",Text_data.data);
+  const text = new IText(Text_data.text,Text_data.data);
   text.set("id",Text_data.id)
   text.set("timestamp",Text_data.timestamp)
   socket.send(JSON.stringify(Text_data))
