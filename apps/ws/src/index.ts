@@ -1,24 +1,44 @@
 import { WebSocket, WebSocketServer } from 'ws';
 import { handlesocket } from './handlesocket';
+import jwt from "jsonwebtoken"
+import dotenv from 'dotenv';
+dotenv.config();
+
+interface user{
+    userid:string,
+    roomid:string[],
+    ws:WebSocket,
+    isAdmin?:boolean
+}
+export const users:user[]=[]
 
 const wss = new WebSocketServer({ port: 8080 });
+export interface CustomWebSocket extends WebSocket {
+    userid?: string; // Optional user ID property
+}
+function checktoken(token:string):string|null{
+    const user = jwt.verify(token,process.env.Secret as string) as { id: string } | null;
+return user?.id || null
+}
 
-// interface users{
-//     userid:string,
-//     roomid:string[],
-//     ws:WebSocket
-// }
-
-wss.on('connection', function connection(ws: WebSocket) {
-
-
-    ws.on("message", (message) => {
-        wss.clients.forEach((c) => {
-            if(c!==ws){
-
-                c.send(message.toString())
-            }
-        })
-        // handlesocket(message.toString(),ws)
-    })
+wss.on('connection', function connection(ws: CustomWebSocket,req) {
+     const url = req.url
+  if(!url){
+    return  
+  }
+  const queryparams = new URLSearchParams(url.split("?")[1])
+    const token = queryparams.get("token")
+    if(!token){
+        ws.close();
+        return;
+    }
+    const userid = checktoken(token)
+    if(!userid){
+        ws.close();
+        return;
+    }
+    ws.userid = userid;
+ws.on("message",(data)=>{
+    handlesocket(data.toString(), ws)
+});
 });

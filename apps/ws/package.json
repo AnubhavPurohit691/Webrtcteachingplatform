@@ -10,8 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@repo/db":"workspace:*",
     "@types/ws": "^8.18.1",
-    "ws": "^8.18.2",
-    "@repo/typescript-config": "workspace:*"
+    "dotenv": "^16.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^8.18.2"
   }
 }

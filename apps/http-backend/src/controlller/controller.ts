@@ -2,6 +2,7 @@ import  { Request, Response } from "express";
 import bcrypt from "bcrypt"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { prismaClient } from "@repo/db/db";
+import { Authrequest } from "../middleware/middleware";
 export const signup = async (req:Request,res:Response)=>{
     const {username,email,password} = req.body
     if(!username&&!email&&password)return ;
@@ -46,4 +47,20 @@ export const signin=async (req:Request,res:Response)=>{
         JWTSECRET as string
     );
     res.json({ token: token });
+}
+
+export const createroom=async (req:Authrequest,res:Response)=>{
+    const roomid = crypto.randomUUID()
+    try {
+        const room = await prismaClient.room.create({
+            data:{
+                id:roomid,
+                userId:req.userid as string
+            }
+        })
+        res.json(room)
+    } catch (error) {
+        console.error("Error creating room:", error);
+        res.status(500).json({ error: "Failed to create room" });
+    }
 }

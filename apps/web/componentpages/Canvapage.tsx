@@ -1,17 +1,18 @@
 "use client"
 import { Canvas, Circle, FabricObject, Group, IText, Line, Path, PencilBrush, Rect, Triangle } from 'fabric'
 import React, { useEffect, useRef, useState } from 'react'
-import { FaRegSquare, FaRegCircle, FaRegDotCircle, FaPencilAlt, FaEraser, FaFont, FaComment, FaArrowRight } from "react-icons/fa";
+import { FaRegSquare, FaRegCircle,  FaPencilAlt, FaEraser, FaFont, FaArrowRight } from "react-icons/fa";
 import { handleArrow, handleCircle, handleEraser, handlePencil, handleRectangle, handleText } from '../hooks/function';
 import { useSocket } from '../hooks/useSocket';
 
 
-const Canvapage = () => {
+const Canvapage = ({ roomid }:{roomid:string}) => {
   const Canvaref = useRef<HTMLCanvasElement | null>(null)
   const [canvas, setCanvas] = useState<Canvas>()
   const [drawmode, setdrawmode] = useState(false)
-  const [selectobj, setselectobj] = useState<FabricObject | null>()
   const socket = useSocket()
+  const [admin,setadmin] = useState<boolean>()
+  const [Recording,setRecording] = useState<boolean>(false)
 
   useEffect(() => {
     let initCanva: Canvas | null = null
@@ -25,6 +26,7 @@ const Canvapage = () => {
       initCanva.backgroundColor = "#000"
       initCanva.renderAll()
       setCanvas(initCanva)
+  
     }
 
     const handleResize = () => {
@@ -41,6 +43,24 @@ const Canvapage = () => {
       initCanva?.dispose()
     }
   }, [])
+  useEffect(() => {
+  if (!socket || !roomid) return;
+
+  const joinRoom = () => {
+    socket.send(JSON.stringify({ type: "join", roomid:roomid.toString() }));
+  };
+
+  if (socket.readyState === WebSocket.OPEN) {
+    joinRoom();
+  } else {
+    socket.addEventListener("open", joinRoom);
+
+    // Cleanup listener when component unmounts or socket changes
+    return () => {
+      socket.removeEventListener("open", joinRoom);
+    };
+  }
+}, [socket, roomid]);
 
 useEffect(()=>{
   if(!socket&&!canvas)return
@@ -55,7 +75,8 @@ if (canvas&&socket){
             type:"modification",
             data: obj.toObject(),
             id: obj.get('id'),
-            timestamp: obj.get("timestamp")
+            timestamp: obj.get("timestamp"),
+            roomid
           }))      
       }
     });
@@ -134,6 +155,12 @@ if (canvas&&socket){
               canvas.renderAll()
             }
             break;
+            case "joined":
+            if (data.admin) {
+              setadmin(true)
+            } else {
+              setadmin(false)
+            }
           default:
             break;
         }
@@ -143,30 +170,33 @@ if (canvas&&socket){
     };
   }, [socket, canvas]);
 
+
   return (
     <div className='w-full h-screen relative'>
       <canvas ref={Canvaref} />
-      <div className='absolute top-10 left-1/2 -translate-x-1/2 h-12 min-w-lg bg-white rounded-2xl  items-center gap-2 px-4 shadow-lg flex justify-between'>
-        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleRectangle({ canvas }, socket)}>
+      {admin &&<div className='absolute top-10 left-1/2 -translate-x-1/2 h-12 min-w-lg bg-white rounded-2xl  items-center gap-2 px-4 shadow-lg flex justify-between'>
+        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleRectangle({ canvas }, socket,roomid,admin,Recording)}>
           <FaRegSquare className="w-5 h-5" />
         </button>
-        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleCircle({ canvas }, socket)}>
+        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleCircle({ canvas }, socket,roomid,admin,Recording)}>
           <FaRegCircle className="w-5 h-5" />
         </button>
-        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleArrow({ canvas }, socket)}>
+        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleArrow({ canvas }, socket,roomid,admin,Recording)}>
           <FaArrowRight className="w-5 h-5" />
         </button>
-        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleText({ canvas }, socket)}>
+        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleText({ canvas }, socket,roomid,admin,Recording)}>
           <FaFont className="w-5 h-5" />
         </button>
-        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handlePencil({ canvas }, setdrawmode, drawmode, socket)}>
+        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handlePencil({ canvas }, setdrawmode, drawmode, socket,roomid,  admin ,Recording)}>
           <FaPencilAlt className="w-5 h-5" />
         </button>
-        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleEraser({ canvas }, socket)}>
+        <button className='p-2 hover:bg-gray-400 rounded-lg transition-colors' onClick={() => canvas && socket && handleEraser({ canvas }, socket,roomid, admin,Recording)}>
           <FaEraser className="w-5 h-5" />
         </button>
-
-      </div>
+        <button className='p-2 hover:bg-gray-400 bg-red-500 text-white rounded-lg transition-colors' onClick={()=>setRecording((prev)=>!prev)} >
+          {Recording ? <div >Stop-Rec</div>:<div>Start-Rec</div>}
+        </button>
+      </div>}
     </div>
   )
 }

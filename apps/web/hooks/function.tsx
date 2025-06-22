@@ -1,6 +1,6 @@
-
+import { time, timeStamp } from "console"
 import { Canvas, Circle, Group, IText, Line, PencilBrush, Rect, Triangle } from "fabric"
-export const handleRectangle = ({ canvas }: { canvas: Canvas }, socket: WebSocket) => {
+export const handleRectangle = ({ canvas }: { canvas: Canvas }, socket: WebSocket,roomid:string ,admin:boolean,recording:boolean) => {
   const id =crypto.randomUUID()
   const rec_data = {
     type: "rectangle",
@@ -13,18 +13,20 @@ export const handleRectangle = ({ canvas }: { canvas: Canvas }, socket: WebSocke
       left: 100,
       top: 100,
     },
-    timestamp:  Date.now()
+    timestamp:  Date.now(),
+    roomid:roomid,
+    admin,recording
   }
-  const rect = new Rect(rec_data.data)
-  rect.set("id",id)
-  rect.set("timestamp",rec_data.timestamp)
-  socket.send(JSON.stringify(rec_data))
-  canvas.add(rect)
-  canvas.setActiveObject(rect)
+  const rectangle = new Rect(rec_data.data)
+  rectangle.set("id",id)
+  rectangle.set("timestamp",rec_data.timestamp)
+  canvas.add(rectangle)
+  canvas.setActiveObject(rectangle)
   canvas.renderAll()
+  socket.send(JSON.stringify(rec_data))
 }
 
-export const handleCircle = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
+export const handleCircle = ({ canvas }: { canvas: Canvas },socket:WebSocket,roomid:string,admin:boolean,recording:boolean) => {
   const id = crypto.randomUUID()
   const cir_data = {
     type: "circle",
@@ -36,7 +38,10 @@ export const handleCircle = ({ canvas }: { canvas: Canvas },socket:WebSocket) =>
       left: 100,
       top: 200
     },
-    timestamp:Date.now()
+    timestamp:Date.now(),
+    roomid:roomid,
+    admin,
+    recording
   }
   const circle = new Circle(cir_data.data)
   circle.set("id",id)
@@ -47,7 +52,7 @@ export const handleCircle = ({ canvas }: { canvas: Canvas },socket:WebSocket) =>
   canvas.renderAll()
 }
 
-export const handleArrow = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
+export const handleArrow = ({ canvas }: { canvas: Canvas },socket:WebSocket,roomid:string,admin:boolean,recording:boolean) => {
   const id = crypto.randomUUID()
   const x1 = 100, y1 = 100, x2 = 250, y2 = 200;
 
@@ -93,7 +98,10 @@ const data = {
     selectable: false,
     evented: false,
   }},
-  timestamp:Date.now()
+  timestamp:Date.now(),
+  roomid:roomid,
+  admin,
+  recording
 }
   // Group line and arrowhead together
   const arrow = new Group([line, triangle],data.arrowdata );
@@ -105,7 +113,7 @@ const data = {
   canvas.renderAll();
 }
 
-export const handleText = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
+export const handleText = ({ canvas }: { canvas: Canvas },socket:WebSocket,roomid:string,admin:boolean,recording:boolean) => {
   const id = crypto.randomUUID()
   const Text_data = {
     type: "text", 
@@ -120,7 +128,10 @@ export const handleText = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
       fontFamily: "Arial",
       stroke: "", // optional stroke around letters
       editable: true, // default true for IText
-    }
+    },
+    roomid:roomid,
+    admin:admin,
+    recording
   }
   const text = new IText(Text_data.text,Text_data.data);
   text.set("id",Text_data.id)
@@ -131,7 +142,7 @@ export const handleText = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
   canvas.renderAll();
 }
 
-export const handlePencil = ({ canvas }: { canvas: Canvas }, setdrawmode: any, drawmode: any,socket:WebSocket) => {
+export const handlePencil = ({ canvas }: { canvas: Canvas }, setdrawmode: any, drawmode: any,socket:WebSocket,roomid:string,admin:boolean,recording:boolean) => {
   const id = crypto.randomUUID()
   const timestamp= Date.now()
   const newmode = !drawmode
@@ -149,13 +160,16 @@ export const handlePencil = ({ canvas }: { canvas: Canvas }, setdrawmode: any, d
         type:"drawing",
         timestamp,
         id,
-        data:path.toObject()
+        roomid,
+        data:path.toObject(),
+        admin:admin,
+        recording
       }))
     })
   }
 }
 
-export const handleEraser = ({ canvas }: { canvas: Canvas },socket:WebSocket) => {
+export const handleEraser = ({ canvas }: { canvas: Canvas },socket:WebSocket,roomid:string,admin:boolean,recording:boolean) => {
   const activeObject = canvas.getActiveObject();
   
   if (activeObject) {
@@ -163,7 +177,11 @@ export const handleEraser = ({ canvas }: { canvas: Canvas },socket:WebSocket) =>
    if(id){
     socket.send(JSON.stringify({
       type:"erase",
-      id
+      id,
+      roomid,
+      timestamp:Date.now(),
+      admin:admin,
+      recording
     }))
    }
     canvas.remove(activeObject);

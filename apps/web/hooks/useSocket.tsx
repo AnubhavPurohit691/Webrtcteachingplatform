@@ -6,13 +6,13 @@ export function useSocket(): WebSocket | undefined {
     const [socket, setSocket] = useState<WebSocket | undefined>(undefined);
     
     useEffect(() => {
-        // const token = localStorage.getItem('token');
-        // if (!token) {
-        //     console.error('No token found in localStorage');
-        //     return;
-        // }
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No token found in localStorage');
+            return;
+        }
 
-        const ws = new WebSocket(`ws://localhost:8080`);
+        const ws = new WebSocket(`ws://localhost:8080?token=${token}`);
         
         ws.onopen = () => {
             console.log('WebSocket connection established');
