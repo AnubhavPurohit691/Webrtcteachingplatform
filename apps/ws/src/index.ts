@@ -2,6 +2,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import { handlesocket } from './handlesocket';
 import jwt from "jsonwebtoken"
 import dotenv from 'dotenv';
+import { Player } from './Player';
 dotenv.config();
 
 interface user{
@@ -14,7 +15,8 @@ export const users:user[]=[]
 
 const wss = new WebSocketServer({ port: 8080 });
 export interface CustomWebSocket extends WebSocket {
-    userid?: string; // Optional user ID property
+    userid?: string,
+    player:Player // Optional user ID property
 }
 function checktoken(token:string):string|null{
     const user = jwt.verify(token,process.env.Secret as string) as { id: string } | null;

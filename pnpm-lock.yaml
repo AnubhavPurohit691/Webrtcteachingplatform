@@ -54,6 +54,27 @@ importers:
         specifier: ^9.0.2
         version: 9.0.2
 
+  apps/streamingws:
+    dependencies:
+      '@types/jsonwebtoken':
+        specifier: ^9.0.9
+        version: 9.0.9
+      '@types/ws':
+        specifier: ^8.18.1
+        version: 8.18.1
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
+      jsonwebtoken:
+        specifier: ^9.0.2
+        version: 9.0.2
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
+      ws:
+        specifier: ^8.18.2
+        version: 8.18.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+
   apps/web:
     dependencies:
       '@radix-ui/react-label':
@@ -122,7 +143,7 @@ importers:
         version: link:../../packages/typescript-config
       '@types/bun':
         specifier: latest
-        version: 1.2.16
+        version: 1.2.17
       '@types/node':
         specifier: ^22.15.3
         version: 22.15.3
@@ -165,6 +186,9 @@ importers:
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
       utf-8-validate:
         specifier: ^5.0.2
         version: 5.0.10
@@ -750,8 +774,8 @@ packages:
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
-  '@types/bun@1.2.16':
-    resolution: {integrity: sha512-1aCZJ/6nSiViw339RsaNhkNoEloLaPzZhxMOYEa7OzRzO41IGg5n/7I43/ZIAW/c+Q6cT12Vf7fOZOoVIzb5BQ==}
+  '@types/bun@1.2.17':
+    resolution: {integrity: sha512-l/BYs/JYt+cXA/0+wUhulYJB6a6p//GTPiJ7nV+QHa8iiId4HZmnu/3J/SowP5g0rTiERY2kfGKXEK5Ehltx4Q==}
 
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
@@ -1051,8 +1075,8 @@ packages:
     resolution: {integrity: sha512-WDtdLmJvAuNNPzByAYpRo2rF1Mmradw6gvWsQKf63476DDXmomT9zUiGypLcG4ibIM67vhAj8jJRdbmEws2Aqw==}
     engines: {node: '>=6.14.2'}
 
-  bun-types@1.2.16:
-    resolution: {integrity: sha512-ciXLrHV4PXax9vHvUrkvun9VPVGOVwbbbBF/Ev1cXz12lyEZMoJpIJABOfPcN9gDJRaiKF9MVbSygLg4NXu3/A==}
+  bun-types@1.2.17:
+    resolution: {integrity: sha512-ElC7ItwT3SCQwYZDYoAH+q6KT4Fxjl8DtZ6qDulUFBmXA8YB4xo+l54J9ZJN+k2pphfn9vk7kfubeSd5QfTVJQ==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -2034,6 +2058,10 @@ packages:
 
   jws@3.2.2:
     resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
+
+  kafkajs@2.2.4:
+    resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
+    engines: {node: '>=14.0.0'}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -3640,9 +3668,9 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/node': 22.15.3
 
-  '@types/bun@1.2.16':
+  '@types/bun@1.2.17':
     dependencies:
-      bun-types: 1.2.16
+      bun-types: 1.2.17
 
   '@types/connect@3.4.38':
     dependencies:
@@ -4041,7 +4069,7 @@ snapshots:
     dependencies:
       node-gyp-build: 4.8.4
 
-  bun-types@1.2.16:
+  bun-types@1.2.17:
     dependencies:
       '@types/node': 22.15.3
 
@@ -5285,6 +5313,8 @@ snapshots:
     dependencies:
       jwa: 1.4.2
       safe-buffer: 5.2.1
+
+  kafkajs@2.2.4: {}
 
   keyv@4.5.4:
     dependencies:
