@@ -1,7 +1,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
-import { createroom, signin, signup } from "./controlller/controller"
+import { createroom, getrooms, signin, signup } from "./controlller/controller"
 import { authmiddleware } from "./middleware/middleware"
 const app = express()
 dotenv.config()
@@ -17,7 +17,8 @@ app.get("/healthcheck",(req,res)=>{
 
 app.post("/signup",signup)
 app.post("/signin",signin)
-app.get("/createroom",authmiddleware,createroom)
+app.post("/createroom",authmiddleware,createroom)
+app.get("/getrooms",getrooms)
 
 app.listen(process.env.PORT,()=>{
     console.log("connected to http")

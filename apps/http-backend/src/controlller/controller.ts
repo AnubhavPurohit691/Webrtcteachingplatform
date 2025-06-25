@@ -51,16 +51,36 @@ export const signin=async (req:Request,res:Response)=>{
 
 export const createroom=async (req:Authrequest,res:Response)=>{
     const roomid = crypto.randomUUID()
+    const roomname = req.body.roomname
     try {
         const room = await prismaClient.room.create({
             data:{
                 id:roomid,
-                userId:req.userid as string
+                userId:req.userid as string,
+                roomname:roomname
             }
         })
-        res.json(room)
+        res.json({room,roomname})
     } catch (error) {
         console.error("Error creating room:", error);
         res.status(500).json({ error: "Failed to create room" });
+    }
+}
+
+export const getrooms = async (req:Request,res:Response)=>{
+    try {
+        const rooms = await prismaClient.room.findMany({
+            orderBy:{
+                createdAt: 'desc'
+            },
+            select:{
+                roomname:true,
+                id:true,
+            }
+        })
+        res.json({rooms})
+    } catch (error) {
+        console.error("Error fetching rooms:", error);
+        res.status(500).json({ error: "Failed to fetch rooms" });
     }
 }
