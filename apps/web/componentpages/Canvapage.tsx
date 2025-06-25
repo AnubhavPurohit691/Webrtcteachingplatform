@@ -214,7 +214,7 @@ if (canvas&&socket){
           setRecording((prev)=>!prev)
           if(!Recording){
             socket?.send(JSON.stringify({
-              type: "recording",recording:Recording,timestamp:Date.now(),roomid,
+              type: "recording",recording:true,timestamp:Date.now(),roomid,
               data:"start"
             }))
            }}}>

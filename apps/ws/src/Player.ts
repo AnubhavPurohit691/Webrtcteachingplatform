@@ -50,7 +50,7 @@ export class Player {
             const delay = event.timestamp - startTime;
             setTimeout(() => {
                 if (this.isPlaying) {
-                    this.ws.send(JSON.stringify({type:"stream",event}))
+                    this.ws.send(JSON.stringify({type:"stream",data:event}))
                 }
             }, delay);
         });

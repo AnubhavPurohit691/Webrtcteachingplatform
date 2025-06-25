@@ -1,5 +1,5 @@
 "use client"
-import { Canvas, Circle, FabricObject, Group, IText, Line, Path, PencilBrush, Rect, Triangle } from 'fabric'
+import { Canvas, Circle, FabricObject, Group, IText, Line, Path,  Rect, Triangle } from 'fabric'
 import React, { useEffect, useRef, useState } from 'react'
 import {use} from "react"
 
@@ -7,12 +7,9 @@ import { useSocket } from '../../../hooks/useSocket';
 const Canvapage = ({params}:{params:Promise<{roomid:string}>}) => {
   const Canvaref = useRef<HTMLCanvasElement | null>(null)
   const [canvas, setCanvas] = useState<Canvas>()
-  const [drawmode, setdrawmode] = useState(false)
   const socket = useSocket()
-  const [admin,setadmin] = useState<boolean>()
-  const [Recording,setRecording] = useState<boolean>(false)
   const {roomid}=use(params)
-  console.log(roomid)
+
 
   useEffect(() => {
     let initCanva: Canvas | null = null
@@ -74,75 +71,74 @@ const Canvapage = ({params}:{params:Promise<{roomid:string}>}) => {
     socket.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data)
-        switch (data.type) {
+        
+        switch (data.data.data.type) {
           case "rectangle":
-            const rect = new Rect(data.data)
-            rect.set("id",data.id)
-            rect.set("timestamp",data.timestamp)
+            console.log(data.data.data.data)
+            const rect = new Rect(data.data.data.data)
+            rect.set("id",data.data.data.id)
+            rect.set("timestamp",data.data.data.timestamp)
             canvas.add(rect)
-            canvas.setActiveObject(rect)
+
             canvas.renderAll()
             break;
           case "circle":
-            const cir = new Circle(data.data)
-            cir.set("id",data.id)
-            cir.set("timestamp",data.timestamp)
+            const cir = new Circle(data.data.data.data)
+            cir.set("id",data.data.data.id)
+            cir.set("timestamp",data.data.data.timestamp)
             canvas.add(cir)
-            canvas.setActiveObject(cir)
+
             canvas.renderAll()
             break;
           case "text":
-            const text = new IText(data.text, data.data);
-            text.set("id",data.id)
-            text.set("timestamp",data.timestamp)
+            console.log(data)
+            const text = new IText(data.data.data.text, data.data.data.data);
+            text.set("id",data.data.data.id)
+            text.set("timestamp",data.data.data.timestamp)
             canvas.add(text)
-            canvas.setActiveObject(text)
             canvas.renderAll()
             break;
           case "arrow":
-            const line = new Line([data.linedata.x1, data.linedata.y1, data.linedata.x2, data.linedata.y2], data.linedata.data);
-            const triangle = new Triangle(data.triangledata)
-            const Arrow = new Group([line, triangle], data.arrowdata)
-            Arrow.set("id",data.id)
-            Arrow.set("timestamp",data.timestamp)
+            console.log(data.data.data.linedata)
+            const line = new Line([data.data.data.linedata.x1, data.data.data.linedata.y1, data.data.data.linedata.x2, data.data.data.linedata.y2], data.data.data.linedata.data);
+            const triangle = new Triangle(data.data.data.triangledata)
+            const Arrow = new Group([line, triangle], data.data.data.arrowdata)
+            Arrow.set("id",data.data.data.id)
+            Arrow.set("timestamp",data.data.data.timestamp)
             canvas.add(Arrow)
-            canvas.setActiveObject(Arrow)
             canvas.renderAll()
             break;
           case "drawing":
-            const path = new Path(data.data.path, data.data)
-            path.set("id",data.id)
-            path.set("timestamp",data.timestamp)
+            console.log(data)
+            const path = new Path(data.data.data.data.path, data.data.data.data)
+            path.set("id",data.data.data.id)
+            path.set("timestamp",data.data.data.timestamp)
             canvas.add(path)
             canvas.renderAll()
             break;
           case "erase":
-            const obj = getobject(canvas, data.id)
+            console.log(data)
+            const obj = getobject(canvas, data.data.data.id)
             if (obj) {
               canvas.remove(obj)
               canvas.renderAll()
             }
             break;
           case "modification":
-            const modifiedobj = getobject(canvas,data.id)
+            console.log(data)
+            const modifiedobj = getobject(canvas,data.data.data.id)
             if (modifiedobj) {
               // Only set serializable properties
-              Object.entries(data.data).forEach(([key, value]) => {
+              Object.entries(data.data.data.data).forEach(([key, value]) => {
                 if (key !== 'type' && key !== 'version') {
                   modifiedobj.set(key, value)
                 }
               })
-              modifiedobj.set("timestamp",data.timestamp)
+              modifiedobj.set("timestamp",data.data.data.timestamp)
               modifiedobj.setCoords();
               canvas.renderAll()
             }
             break;
-            case "joined":
-            if (data.admin) {
-              setadmin(true)
-            } else {
-              setadmin(false)
-            }
           default:
             break;
         }

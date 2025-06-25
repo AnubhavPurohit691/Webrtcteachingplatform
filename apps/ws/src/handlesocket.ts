@@ -14,10 +14,9 @@ async function startkafka(){
 startkafka()
 export async function handlesocket(message: string, ws: CustomWebSocket) {
   const data = JSON.parse(message);
-  console.log('recording:', data.recording, 'type:', typeof data.recording);
-
   if (data.recording === true) {
     if (!ws.userid) return ws.close();
+    console.log(data)
     await producer.send({ 
       topic: data.roomid.toString(),
       messages: [
@@ -25,10 +24,9 @@ export async function handlesocket(message: string, ws: CustomWebSocket) {
           value: JSON.stringify({
             type: data.type,
             roomid: data.roomid,
-            data: data.data,
+            data: data,
             timestamp: data.timestamp
-          }),
-          key:String(data.timestamp)
+          })
         },
       ],
     });

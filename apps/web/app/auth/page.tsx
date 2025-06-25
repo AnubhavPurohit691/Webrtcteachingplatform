@@ -56,7 +56,7 @@ export default function AuthPage() {
         setMessage("Authentication successful!")
         setMessageType("success")
         setForm({ username: "", email: "", password: "" })
-        router.push("/")
+        router.push("/dashboard")
       } else {
         setMessage(data.error || "Authentication failed. Please try again.")
         setMessageType("error")

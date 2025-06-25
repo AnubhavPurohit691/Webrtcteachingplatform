@@ -6,6 +6,7 @@ import { CookiesProvider } from "react-cookie";
 import ProtectedRoute from "../componentpages/wrapper/Protectionroute";
 import InputBox from "../componentpages/InputBox";
 import Dashboard from "../componentpages/Dashboard";
+import LandingPage from "../componentpages/LandingPage";
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -26,7 +27,7 @@ const ThemeImage = (props: Props) => {
 export default function Home() {
   return (
     <div >
-      <Dashboard/>
+      <LandingPage/>
     </div>
   );
 }
