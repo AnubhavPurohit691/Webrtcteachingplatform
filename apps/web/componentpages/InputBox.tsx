@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import axios from "axios"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Palette,
   Plus,
@@ -30,14 +30,14 @@ import {
   Circle,
   MoreHorizontal,
   RefreshCw,
-} from "lucide-react"
+} from "lucide-react";
 
 const sidebarItems = [
   { icon: Home, label: "Dashboard", active: true },
   { icon: Clock, label: "Recent", active: false },
   { icon: Star, label: "Favorites", active: false },
   { icon: Users, label: "Shared", active: false },
-]
+];
 
 // Color variations for room cards
 const roomColors = [
@@ -47,48 +47,48 @@ const roomColors = [
   "from-yellow-400/20 to-yellow-500/20 border-yellow-400/30",
   "from-yellow-300/20 to-yellow-500/20 border-yellow-400/30",
   "from-yellow-500/20 to-yellow-400/20 border-yellow-500/30",
-]
-interface Room{
-  id:string,
-  roomname:string
+];
+interface Room {
+  id: string;
+  roomname: string;
 }
 export default function Dashboard() {
-  const router = useRouter()
-  const [roomId, setRoomId] = useState("")
-  const [roomName, setRoomName] = useState("")
-  const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false)
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
-  const [isCreating, setIsCreating] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [rooms, setRooms] = useState<Room[]>([])
+  const router = useRouter();
+  const [roomId, setRoomId] = useState("");
+  const [roomName, setRoomName] = useState("");
+  const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [rooms, setRooms] = useState<Room[]>([]);
 
   const fetchRooms = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const response = await axios.get("http://localhost:3001/getrooms", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
-      })
-      setRooms(response.data.rooms)
-      console.log("Fetched rooms:", response.data)
+      });
+      setRooms(response.data.rooms);
+      console.log("Fetched rooms:", response.data);
     } catch (error) {
-      console.error("Failed to fetch rooms:", error)
+      console.error("Failed to fetch rooms:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchRooms()
-  }, [])
+    fetchRooms();
+  }, []);
 
   const handleCreateRoom = async () => {
-    if (!roomName.trim()) return
+    if (!roomName.trim()) return;
 
-    setIsCreating(true)
+    setIsCreating(true);
     try {
       const response = await axios.post(
         "http://localhost:3001/createroom",
@@ -101,36 +101,37 @@ export default function Dashboard() {
             "Content-Type": "application/json",
           },
         },
-      )
-      const newRoomId = response.data
-      setIsCreateDialogOpen(false)
-      setRoomName("")
+      );
+      const newRoomId = response.data;
+      setIsCreateDialogOpen(false);
+      setRoomName("");
 
       // Refresh rooms list to include the new room
-      await fetchRooms()
-      console.log("Room created successfully:", newRoomId)
-      router.push(`/canva/${newRoomId.room.id}`)
+      await fetchRooms();
+      console.log("Room created successfully:", newRoomId);
+      router.push(`/canva/${newRoomId.room.id}`);
     } catch (error) {
-      console.error("Error creating room:", error)
+      console.error("Error creating room:", error);
     } finally {
-      setIsCreating(false)
+      setIsCreating(false);
     }
-  }
+  };
 
   const handleJoinRoom = () => {
     if (roomId.trim()) {
-      router.push(`/canva/${roomId}`)
-      setIsJoinDialogOpen(false)
-      setRoomId("")
+      router.push(`/canva/${roomId}`);
+      setIsJoinDialogOpen(false);
+      setRoomId("");
     }
-  }
+  };
 
   const handleRoomClick = (id: string) => {
+    router.push(`/streaming/${id}`);
+  };
 
-    router.push(`/streaming/${id}`)
-  }
-
-  const filteredRooms = rooms.filter((room) => room.roomname.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredRooms = rooms.filter((room) =>
+    room.roomname.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex">
@@ -153,7 +154,10 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <div className="p-4 border-b border-yellow-400/20">
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold mb-3">
                 <Plus className="w-4 h-4 mr-2" />
@@ -162,9 +166,12 @@ export default function Dashboard() {
             </DialogTrigger>
             <DialogContent className="bg-gray-900 border border-yellow-400/30">
               <DialogHeader>
-                <DialogTitle className="text-white">Create New Canvas</DialogTitle>
+                <DialogTitle className="text-white">
+                  Create New Canvas
+                </DialogTitle>
                 <DialogDescription className="text-gray-400">
-                  Give your canvas a name to get started with collaborative drawing.
+                  Give your canvas a name to get started with collaborative
+                  drawing.
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
@@ -197,8 +204,8 @@ export default function Dashboard() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setIsCreateDialogOpen(false)
-                      setRoomName("")
+                      setIsCreateDialogOpen(false);
+                      setRoomName("");
                     }}
                     disabled={isCreating}
                     className="bg-transparent text-gray-400 border-gray-600 hover:bg-gray-800"
@@ -222,7 +229,9 @@ export default function Dashboard() {
             </DialogTrigger>
             <DialogContent className="bg-gray-900 border border-yellow-400/30">
               <DialogHeader>
-                <DialogTitle className="text-white">Join Canvas Room</DialogTitle>
+                <DialogTitle className="text-white">
+                  Join Canvas Room
+                </DialogTitle>
                 <DialogDescription className="text-gray-400">
                   Enter the room ID to join an existing canvas.
                 </DialogDescription>
@@ -279,18 +288,30 @@ export default function Dashboard() {
         <div className="p-4 border-t border-yellow-400/20">
           <div className="flex items-center gap-3 mb-3">
             <Avatar className="w-8 h-8">
-              <AvatarFallback className="bg-yellow-400/20 text-yellow-400 text-sm">JD</AvatarFallback>
+              <AvatarFallback className="bg-yellow-400/20 text-yellow-400 text-sm">
+                JD
+              </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">John Doe</p>
+              <p className="text-sm font-medium text-white truncate">
+                John Doe
+              </p>
               <p className="text-xs text-gray-400 truncate">john@example.com</p>
             </div>
           </div>
           <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-yellow-400 flex-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-400 hover:text-yellow-400 flex-1"
+            >
               <Settings className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-yellow-400 flex-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-400 hover:text-yellow-400 flex-1"
+            >
               <LogOut className="w-4 h-4" />
             </Button>
           </div>
@@ -304,7 +325,9 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold text-white">Dashboard</h2>
-              <p className="text-sm text-gray-400">Manage your collaborative canvases</p>
+              <p className="text-sm text-gray-400">
+                Manage your collaborative canvases
+              </p>
             </div>
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -323,7 +346,9 @@ export default function Dashboard() {
                 disabled={isLoading}
                 className="bg-transparent text-yellow-400 border-yellow-400/50 hover:bg-yellow-400/10"
               >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
+                <RefreshCw
+                  className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+                />
               </Button>
             </div>
           </div>
@@ -338,7 +363,9 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-400">Total Canvases</p>
-                    <p className="text-2xl font-semibold text-white">{rooms.length}</p>
+                    <p className="text-2xl font-semibold text-white">
+                      {rooms.length}
+                    </p>
                   </div>
                   <div className="w-10 h-10 bg-yellow-400/20 rounded-lg flex items-center justify-center">
                     <Palette className="w-5 h-5 text-yellow-400" />
@@ -351,7 +378,9 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-400">Available Rooms</p>
-                    <p className="text-2xl font-semibold text-white">{filteredRooms.length}</p>
+                    <p className="text-2xl font-semibold text-white">
+                      {filteredRooms.length}
+                    </p>
                   </div>
                   <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
                     <Circle className="w-5 h-5 text-green-400 fill-current" />
@@ -391,8 +420,14 @@ export default function Dashboard() {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-white">Your Canvases</h3>
-              <Button variant="ghost" className="text-gray-400 hover:text-yellow-400" onClick={fetchRooms}>
-                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
+              <Button
+                variant="ghost"
+                className="text-gray-400 hover:text-yellow-400"
+                onClick={fetchRooms}
+              >
+                <RefreshCw
+                  className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+                />
                 Refresh
               </Button>
             </div>
@@ -400,7 +435,10 @@ export default function Dashboard() {
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, index) => (
-                  <Card key={index} className="bg-white/5 backdrop-blur-xl border border-yellow-400/20">
+                  <Card
+                    key={index}
+                    className="bg-white/5 backdrop-blur-xl border border-yellow-400/20"
+                  >
                     <CardContent className="p-0">
                       <div className="aspect-video bg-white/10 rounded-t-lg animate-pulse" />
                       <div className="p-4">
@@ -434,7 +472,10 @@ export default function Dashboard() {
                             <p className="text-xs">Canvas Preview</p>
                           </div>
                           <div className="absolute top-3 left-3">
-                            <Badge variant="secondary" className="bg-white/20 text-gray-300 text-xs">
+                            <Badge
+                              variant="secondary"
+                              className="bg-white/20 text-gray-300 text-xs"
+                            >
                               Ready
                             </Badge>
                           </div>
@@ -443,7 +484,7 @@ export default function Dashboard() {
                             size="icon"
                             className="absolute top-3 right-3 text-gray-300 hover:text-yellow-400"
                             onClick={(e) => {
-                              e.stopPropagation()
+                              e.stopPropagation();
                               // Add menu functionality here
                             }}
                           >
@@ -453,7 +494,9 @@ export default function Dashboard() {
 
                         {/* Canvas Info */}
                         <div className="p-4">
-                          <h4 className="font-medium text-white mb-1 line-clamp-1">{room.roomname}</h4>
+                          <h4 className="font-medium text-white mb-1 line-clamp-1">
+                            {room.roomname}
+                          </h4>
                           <div className="flex items-center gap-2 mb-3">
                             <Avatar className="w-5 h-5">
                               <AvatarFallback className="bg-yellow-400/20 text-yellow-400 text-xs">
@@ -465,14 +508,19 @@ export default function Dashboard() {
                                   .toUpperCase()}
                               </AvatarFallback>
                             </Avatar>
-                            <span className="text-sm text-gray-300">Room ID: {room.id}</span>
+                            <span className="text-sm text-gray-300">
+                              Room ID: {room.id}
+                            </span>
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1 text-xs text-gray-400">
                               <Circle className="w-3 h-3 fill-current" />
                               <span>Available</span>
                             </div>
-                            <Badge variant="secondary" className="text-xs bg-white/10 text-gray-300">
+                            <Badge
+                              variant="secondary"
+                              className="text-xs bg-white/10 text-gray-300"
+                            >
                               Canvas
                             </Badge>
                           </div>
@@ -512,5 +560,5 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }

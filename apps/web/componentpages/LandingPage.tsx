@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, easeOut, easeInOut } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { useState } from "react";
+import { motion, easeOut, easeInOut } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Palette,
   Users,
@@ -21,12 +21,12 @@ import {
   Mail,
   Phone,
   MapPin,
-} from "lucide-react"
-import { useRouter } from "next/navigation"
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
-  const [isHovered, setIsHovered] = useState<string | null>(null)
-    const router = useRouter()
+  const [isHovered, setIsHovered] = useState<string | null>(null);
+  const router = useRouter();
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -36,7 +36,7 @@ export default function LandingPage() {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -45,7 +45,7 @@ export default function LandingPage() {
       y: 0,
       transition: { duration: 0.6, ease: easeOut }, // use imported easing function
     },
-  }
+  };
 
   const floatingVariants = {
     animate: {
@@ -57,34 +57,38 @@ export default function LandingPage() {
         ease: easeInOut, // use imported easing function
       },
     },
-  }
+  };
 
   const features = [
     {
       icon: Users,
       title: "Real-time Collaboration",
-      description: "Draw together with your team in real-time. See every stroke as it happens.",
+      description:
+        "Draw together with your team in real-time. See every stroke as it happens.",
       color: "from-yellow-400 to-yellow-500",
     },
     {
       icon: Zap,
       title: "Live Event Streaming",
-      description: "Stream all drawing events instantly. No lag, no delays, just pure creativity.",
+      description:
+        "Stream all drawing events instantly. No lag, no delays, just pure creativity.",
       color: "from-yellow-500 to-yellow-600",
     },
     {
       icon: Eye,
       title: "Live Cursors",
-      description: "Watch teammates' cursors move in real-time. Feel truly connected.",
+      description:
+        "Watch teammates' cursors move in real-time. Feel truly connected.",
       color: "from-yellow-400 to-yellow-500",
     },
     {
       icon: Share2,
       title: "Instant Sharing",
-      description: "Share your canvas with anyone, anywhere. Collaborate without boundaries.",
+      description:
+        "Share your canvas with anyone, anywhere. Collaborate without boundaries.",
       color: "from-yellow-500 to-yellow-600",
     },
-  ]
+  ];
 
   const footerSections = [
     {
@@ -127,7 +131,7 @@ export default function LandingPage() {
         { name: "Security", href: "#security" },
       ],
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
@@ -142,7 +146,11 @@ export default function LandingPage() {
             "radial-gradient(circle at 20% 50%, #fbbf24 0%, transparent 70%)",
           ],
         }}
-        transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+        transition={{
+          duration: 10,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "linear",
+        }}
       />
 
       {/* Floating particles */}
@@ -167,11 +175,22 @@ export default function LandingPage() {
         />
       ))}
 
-      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="relative z-10">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10"
+      >
         {/* Header */}
-        <motion.header variants={itemVariants} className="container mx-auto px-6 py-8">
+        <motion.header
+          variants={itemVariants}
+          className="container mx-auto px-6 py-8"
+        >
           <nav className="flex items-center justify-between">
-            <motion.div className="flex items-center gap-3" whileHover={{ scale: 1.05 }}>
+            <motion.div
+              className="flex items-center gap-3"
+              whileHover={{ scale: 1.05 }}
+            >
               <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center">
                 <Palette className="w-6 h-6 text-black" />
               </div>
@@ -181,16 +200,28 @@ export default function LandingPage() {
             </motion.div>
 
             <motion.div className="flex items-center gap-4">
-              <Button variant="ghost" className="text-white hover:text-yellow-400 hover:bg-white/10">
+              <Button
+                variant="ghost"
+                className="text-white hover:text-yellow-400 hover:bg-white/10"
+              >
                 Features
               </Button>
-              <Button variant="ghost" className="text-white hover:text-yellow-400 hover:bg-white/10">
+              <Button
+                variant="ghost"
+                className="text-white hover:text-yellow-400 hover:bg-white/10"
+              >
                 Pricing
               </Button>
-              <Button variant="ghost" className="text-white hover:text-yellow-400 hover:bg-white/10">
+              <Button
+                variant="ghost"
+                className="text-white hover:text-yellow-400 hover:bg-white/10"
+              >
                 Docs
               </Button>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outline"
                   className="bg-transparent text-yellow-400 border-yellow-400/50 hover:bg-yellow-400/10 hover:text-yellow-300"
@@ -200,9 +231,13 @@ export default function LandingPage() {
                   Login
                 </Button>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-semibold hover:from-yellow-500 hover:to-yellow-600"
-                onClick={()=>router.push("/dashboard")}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button
+                  className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-semibold hover:from-yellow-500 hover:to-yellow-600"
+                  onClick={() => router.push("/dashboard")}
                 >
                   Get Started
                 </Button>
@@ -212,10 +247,19 @@ export default function LandingPage() {
         </motion.header>
 
         {/* Hero Section */}
-        <motion.section variants={itemVariants} className="container mx-auto px-6 py-20 text-center">
-          <motion.div className="max-w-4xl mx-auto" variants={containerVariants}>
+        <motion.section
+          variants={itemVariants}
+          className="container mx-auto px-6 py-20 text-center"
+        >
+          <motion.div
+            className="max-w-4xl mx-auto"
+            variants={containerVariants}
+          >
             <motion.div variants={itemVariants} className="mb-8">
-              <motion.h1 className="text-6xl md:text-7xl font-bold mb-6 leading-tight" variants={itemVariants}>
+              <motion.h1
+                className="text-6xl md:text-7xl font-bold mb-6 leading-tight"
+                variants={itemVariants}
+              >
                 <span className="bg-gradient-to-r from-white via-yellow-200 to-white bg-clip-text text-transparent">
                   Draw Together,
                 </span>
@@ -231,28 +275,35 @@ export default function LandingPage() {
               className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
             >
               Experience the future of collaborative drawing with{" "}
-              <span className="text-yellow-400 font-semibold">real-time streaming</span> of every stroke, gesture, and
-              creative moment. Built on Excalidraw's foundation, enhanced for the modern world.
+              <span className="text-yellow-400 font-semibold">
+                real-time streaming
+              </span>{" "}
+              of every stroke, gesture, and creative moment. Built on
+              Excalidraw's foundation, enhanced for the modern world.
             </motion.p>
 
             <motion.div
               variants={itemVariants}
               className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
             >
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold px-8 py-4 text-lg hover:from-yellow-500 hover:to-yellow-600 shadow-lg shadow-yellow-500/25"
                   onClick={() => router.push("/dashboard")}
                 >
-                  <Play className="w-5 h-5 mr-2" 
-                  
-                  />
+                  <Play className="w-5 h-5 mr-2" />
                   Start Drawing Now
                 </Button>
               </motion.div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   size="lg"
                   variant="outline"
@@ -265,7 +316,10 @@ export default function LandingPage() {
             </motion.div>
 
             {/* Demo Preview */}
-            <motion.div variants={itemVariants} className="relative max-w-4xl mx-auto">
+            <motion.div
+              variants={itemVariants}
+              className="relative max-w-4xl mx-auto"
+            >
               <motion.div
                 variants={floatingVariants}
                 animate="animate"
@@ -276,7 +330,9 @@ export default function LandingPage() {
                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                    <span className="text-gray-600 text-sm ml-4">canvacraft.app</span>
+                    <span className="text-gray-600 text-sm ml-4">
+                      canvacraft.app
+                    </span>
                   </div>
 
                   <div className="h-64 bg-gray-50 rounded-lg relative flex items-center justify-center">
@@ -285,7 +341,10 @@ export default function LandingPage() {
                         scale: [1, 1.1, 1],
                         rotate: [0, 5, 0],
                       }}
-                      transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
+                      transition={{
+                        duration: 3,
+                        repeat: Number.POSITIVE_INFINITY,
+                      }}
                       className="text-gray-400"
                     >
                       <Pencil className="w-16 h-16" />
@@ -297,7 +356,10 @@ export default function LandingPage() {
                         x: [0, 50, 0],
                         y: [0, -30, 0],
                       }}
-                      transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                      transition={{
+                        duration: 2,
+                        repeat: Number.POSITIVE_INFINITY,
+                      }}
                       className="absolute top-4 left-4"
                     >
                       <MousePointer className="w-4 h-4 text-blue-500" />
@@ -308,7 +370,11 @@ export default function LandingPage() {
                         x: [0, -40, 0],
                         y: [0, 20, 0],
                       }}
-                      transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
+                      transition={{
+                        duration: 2.5,
+                        repeat: Number.POSITIVE_INFINITY,
+                        delay: 0.5,
+                      }}
                       className="absolute bottom-4 right-4"
                     >
                       <MousePointer className="w-4 h-4 text-green-500" />
@@ -321,17 +387,24 @@ export default function LandingPage() {
         </motion.section>
 
         {/* Features Section */}
-        <motion.section variants={itemVariants} className="container mx-auto px-6 py-20">
+        <motion.section
+          variants={itemVariants}
+          className="container mx-auto px-6 py-20"
+        >
           <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent">
               Powerful Features
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Everything you need for seamless collaborative drawing and real-time creativity.
+              Everything you need for seamless collaborative drawing and
+              real-time creativity.
             </p>
           </motion.div>
 
-          <motion.div variants={containerVariants} className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <motion.div
+            variants={containerVariants}
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+          >
             {features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -345,7 +418,11 @@ export default function LandingPage() {
                   <CardContent className="p-6 text-center">
                     <motion.div
                       className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r ${feature.color} flex items-center justify-center`}
-                      animate={isHovered === feature.title ? { rotate: 360 } : { rotate: 0 }}
+                      animate={
+                        isHovered === feature.title
+                          ? { rotate: 360 }
+                          : { rotate: 0 }
+                      }
                       transition={{ duration: 0.6 }}
                     >
                       <feature.icon className="w-8 h-8 text-black" />
@@ -353,7 +430,9 @@ export default function LandingPage() {
                     <h3 className="text-xl font-bold mb-3 text-white group-hover:text-yellow-400 transition-colors">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-300 leading-relaxed">{feature.description}</p>
+                    <p className="text-gray-300 leading-relaxed">
+                      {feature.description}
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -362,13 +441,19 @@ export default function LandingPage() {
         </motion.section>
 
         {/* CTA Section */}
-        <motion.section variants={itemVariants} className="container mx-auto px-6 py-20">
+        <motion.section
+          variants={itemVariants}
+          className="container mx-auto px-6 py-20"
+        >
           <motion.div
             variants={itemVariants}
             className="bg-gradient-to-r from-yellow-400/10 to-yellow-500/10 backdrop-blur-xl rounded-3xl border border-yellow-400/30 p-12 text-center"
           >
             <motion.div variants={containerVariants}>
-              <motion.div variants={itemVariants} className="flex justify-center mb-6">
+              <motion.div
+                variants={itemVariants}
+                className="flex justify-center mb-6"
+              >
                 <Sparkles className="w-12 h-12 text-yellow-400" />
               </motion.div>
 
@@ -379,12 +464,22 @@ export default function LandingPage() {
                 Ready to Start Creating?
               </motion.h2>
 
-              <motion.p variants={itemVariants} className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join thousands of creators who are already using Canvacraft to bring their ideas to life in real-time.
+              <motion.p
+                variants={itemVariants}
+                className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              >
+                Join thousands of creators who are already using Canvacraft to
+                bring their ideas to life in real-time.
               </motion.p>
 
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <Button
                     size="lg"
                     className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold px-8 py-4 text-lg hover:from-yellow-500 hover:to-yellow-600"
@@ -394,7 +489,10 @@ export default function LandingPage() {
                   </Button>
                 </motion.div>
 
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <Button
                     size="lg"
                     variant="outline"
@@ -409,13 +507,19 @@ export default function LandingPage() {
         </motion.section>
 
         {/* Enhanced Footer */}
-        <motion.footer variants={itemVariants} className="bg-gray-900/50 backdrop-blur-xl border-t border-gray-800">
+        <motion.footer
+          variants={itemVariants}
+          className="bg-gray-900/50 backdrop-blur-xl border-t border-gray-800"
+        >
           <div className="container mx-auto px-6 py-16">
             {/* Main Footer Content */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
               {/* Brand Section */}
               <div className="lg:col-span-2">
-                <motion.div className="flex items-center gap-3 mb-6" whileHover={{ scale: 1.05 }}>
+                <motion.div
+                  className="flex items-center gap-3 mb-6"
+                  whileHover={{ scale: 1.05 }}
+                >
                   <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center">
                     <Palette className="w-6 h-6 text-black" />
                   </div>
@@ -424,8 +528,8 @@ export default function LandingPage() {
                   </span>
                 </motion.div>
                 <p className="text-gray-300 mb-6 leading-relaxed">
-                  The future of collaborative drawing. Create, share, and collaborate in real-time with teams around the
-                  world.
+                  The future of collaborative drawing. Create, share, and
+                  collaborate in real-time with teams around the world.
                 </p>
                 <div className="flex items-center gap-4">
                   <motion.a
@@ -455,7 +559,9 @@ export default function LandingPage() {
               {/* Footer Links */}
               {footerSections.map((section, index) => (
                 <div key={index}>
-                  <h3 className="text-white font-semibold mb-4">{section.title}</h3>
+                  <h3 className="text-white font-semibold mb-4">
+                    {section.title}
+                  </h3>
                   <ul className="space-y-3">
                     {section.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
@@ -495,7 +601,8 @@ export default function LandingPage() {
             <div className="border-t border-gray-800 pt-8">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <p className="text-gray-400 text-sm">
-                  © 2024 Canvacraft. All rights reserved. Built for creators, by creators.
+                  © 2024 Canvacraft. All rights reserved. Built for creators,
+                  by creators.
                 </p>
                 <div className="flex items-center gap-6 text-sm">
                   <motion.a
@@ -526,5 +633,5 @@ export default function LandingPage() {
         </motion.footer>
       </motion.div>
     </div>
-  )
+  );
 }

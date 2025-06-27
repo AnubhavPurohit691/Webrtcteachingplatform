@@ -26,8 +26,8 @@ const ThemeImage = (props: Props) => {
 
 export default function Home() {
   return (
-    <div >
-      <LandingPage/>
+    <div>
+      <LandingPage />
     </div>
   );
 }

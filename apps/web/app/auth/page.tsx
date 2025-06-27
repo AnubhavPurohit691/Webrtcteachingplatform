@@ -1,79 +1,87 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { motion, AnimatePresence, type Variants } from "framer-motion"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Eye, EyeOff, Sparkles } from "lucide-react"
-import axios from "axios"
-import { useRouter } from "next/navigation"
+import type React from "react";
+import { useState } from "react";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Eye, EyeOff, Sparkles } from "lucide-react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface FormData {
-  username: string
-  email: string
-  password: string
+  username: string;
+  email: string;
+  password: string;
 }
 
 export default function AuthPage() {
-  const [isSignup, setIsSignup] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [message, setMessage] = useState("")
-  const [messageType, setMessageType] = useState<"success" | "error">("error")
-  const router = useRouter()
+  const [isSignup, setIsSignup] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<"success" | "error">("error");
+  const router = useRouter();
 
   const [form, setForm] = useState<FormData>({
     username: "",
     email: "",
     password: "",
-  })
+  });
 
   const handleInputChange = (field: keyof FormData, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }))
-    if (message) setMessage("")
-  }
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (message) setMessage("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setMessage("")
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage("");
 
-    const endpoint = isSignup ? "http://localhost:3001/signup" : "http://localhost:3001/signin"
+    const endpoint = isSignup
+      ? "http://localhost:3001/signup"
+      : "http://localhost:3001/signin";
     const payload = isSignup
       ? { username: form.username, email: form.email, password: form.password }
-      : { email: form.email, password: form.password }
+      : { email: form.email, password: form.password };
 
     try {
-      const response = await axios.post(endpoint,payload)
+      const response = await axios.post(endpoint, payload);
 
-      const data = response.data
+      const data = response.data;
 
       if (response.status === 200 && data.token) {
-        localStorage.setItem("token", data.token)
-        setMessage("Authentication successful!")
-        setMessageType("success")
-        setForm({ username: "", email: "", password: "" })
-        router.push("/dashboard")
+        localStorage.setItem("token", data.token);
+        setMessage("Authentication successful!");
+        setMessageType("success");
+        setForm({ username: "", email: "", password: "" });
+        router.push("/dashboard");
       } else {
-        setMessage(data.error || "Authentication failed. Please try again.")
-        setMessageType("error")
+        setMessage(data.error || "Authentication failed. Please try again.");
+        setMessageType("error");
       }
     } catch (error) {
-      setMessage("Network error. Please check your connection.")
-      setMessageType("error")
+      setMessage("Network error. Please check your connection.");
+      setMessageType("error");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const toggleMode = () => {
-    setIsSignup(!isSignup)
-    setMessage("")
-    setForm({ username: "", email: "", password: "" })
-  }
+    setIsSignup(!isSignup);
+    setMessage("");
+    setForm({ username: "", email: "", password: "" });
+  };
 
   const containerVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
@@ -86,7 +94,7 @@ export default function AuthPage() {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, x: -20 },
@@ -95,7 +103,7 @@ export default function AuthPage() {
       x: 0,
       transition: { duration: 0.4, ease: "easeOut" },
     },
-  }
+  };
 
   const buttonVariants: Variants = {
     hover: {
@@ -104,7 +112,7 @@ export default function AuthPage() {
       transition: { duration: 0.2 },
     },
     tap: { scale: 0.98 },
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
@@ -119,7 +127,11 @@ export default function AuthPage() {
             "radial-gradient(circle at 20% 50%, #fbbf24 0%, transparent 50%)",
           ],
         }}
-        transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+        transition={{
+          duration: 8,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "linear",
+        }}
       />
 
       {/* Floating particles */}
@@ -155,23 +167,33 @@ export default function AuthPage() {
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-transparent to-yellow-400/20"
             animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            transition={{
+              duration: 8,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
           />
 
           <CardHeader className="space-y-4 text-center relative z-10 bg-white/80 backdrop-blur-sm">
-            <motion.div variants={itemVariants} className="flex items-center justify-center gap-2">
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center justify-center gap-2"
+            >
               <Sparkles className="w-6 h-6 text-yellow-500" />
               <CardTitle className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-yellow-600 to-gray-900 bg-clip-text text-transparent">
                 {isSignup ? "Create Account" : "Welcome Back"}
               </CardTitle>
               <Sparkles className="w-6 h-6 text-yellow-500" />
             </motion.div>
-            <motion.div variants={itemVariants}>
-            </motion.div>
+            <motion.div variants={itemVariants}></motion.div>
           </CardHeader>
 
           <CardContent className="space-y-6 bg-white/90 backdrop-blur-sm relative z-10">
-            <motion.form onSubmit={handleSubmit} className="space-y-5" variants={containerVariants}>
+            <motion.form
+              onSubmit={handleSubmit}
+              className="space-y-5"
+              variants={containerVariants}
+            >
               <AnimatePresence mode="wait">
                 {isSignup && (
                   <motion.div
@@ -182,7 +204,10 @@ export default function AuthPage() {
                     exit={{ opacity: 0, height: 0 }}
                     className="space-y-2"
                   >
-                    <Label htmlFor="username" className="text-gray-800 font-semibold">
+                    <Label
+                      htmlFor="username"
+                      className="text-gray-800 font-semibold"
+                    >
                       Username
                     </Label>
                     <motion.div whileFocus={{ scale: 1.02 }}>
@@ -191,7 +216,9 @@ export default function AuthPage() {
                         type="text"
                         placeholder="Choose a username"
                         value={form.username}
-                        onChange={(e) => handleInputChange("username", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("username", e.target.value)
+                        }
                         required={isSignup}
                         className="bg-white border-2 border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20 transition-all duration-300 font-medium"
                       />
@@ -218,7 +245,10 @@ export default function AuthPage() {
               </motion.div>
 
               <motion.div variants={itemVariants} className="space-y-2">
-                <Label htmlFor="password" className="text-gray-800 font-semibold">
+                <Label
+                  htmlFor="password"
+                  className="text-gray-800 font-semibold"
+                >
                   Password
                 </Label>
                 <motion.div className="relative" whileFocus={{ scale: 1.02 }}>
@@ -227,7 +257,9 @@ export default function AuthPage() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={form.password}
-                    onChange={(e) => handleInputChange("password", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("password", e.target.value)
+                    }
                     required
                     className="bg-white border-2 border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20 transition-all duration-300 font-medium pr-12"
                   />
@@ -238,7 +270,11 @@ export default function AuthPage() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-yellow-600 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </motion.button>
                 </motion.div>
               </motion.div>
@@ -256,7 +292,10 @@ export default function AuthPage() {
                     <motion.div
                       className="absolute inset-0 bg-white/20"
                       animate={{ x: [-100, 100] }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
+                      transition={{
+                        duration: 1,
+                        repeat: Number.POSITIVE_INFINITY,
+                      }}
                     />
                   )}
                   <span className="relative z-10 flex items-center justify-center gap-2">
@@ -290,25 +329,32 @@ export default function AuthPage() {
                         : "bg-red-50 border-red-400 text-red-800"
                     } transition-all duration-200`}
                   >
-                    <AlertDescription className="font-medium">{message}</AlertDescription>
+                    <AlertDescription className="font-medium">
+                      {message}
+                    </AlertDescription>
                   </Alert>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <motion.div variants={itemVariants} className="text-center pt-4 border-t border-gray-200">
+            <motion.div
+              variants={itemVariants}
+              className="text-center pt-4 border-t border-gray-200"
+            >
               <motion.button
                 onClick={toggleMode}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="text-gray-700 hover:text-yellow-600 font-medium transition-colors duration-200 hover:underline"
               >
-                {isSignup ? "Already have an account? Sign in" : "Don't have an account? Create one"}
+                {isSignup
+                  ? "Already have an account? Sign in"
+                  : "Don't have an account? Create one"}
               </motion.button>
             </motion.div>
           </CardContent>
         </Card>
       </motion.div>
     </div>
-  )
+  );
 }
