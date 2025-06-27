@@ -127,7 +127,7 @@ export default function Dashboard() {
 
   const handleRoomClick = (id: string) => {
 
-    router.push(`/canva/${id}`)
+    router.push(`/streaming/${id}`)
   }
 
   const filteredRooms = rooms.filter((room) => room.roomname.toLowerCase().includes(searchQuery.toLowerCase()))
