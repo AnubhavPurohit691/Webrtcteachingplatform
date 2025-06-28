@@ -3,6 +3,7 @@ import { handlesocket } from "./handlesocket";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Player } from "./Player";
+import { connectRedis } from "./connectredis";
 dotenv.config();
 
 interface user {
@@ -25,7 +26,10 @@ function checktoken(token: string): string | null {
   return user?.id || null;
 }
 
-wss.on("connection", function connection(ws: CustomWebSocket, req) {
+connectRedis().catch((err)=>{
+  console.log(err)
+})
+wss.on("connection", async function connection(ws: CustomWebSocket, req) {
   const url = req.url;
   if (!url) {
     return;
