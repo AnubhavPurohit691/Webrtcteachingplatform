@@ -43,7 +43,7 @@ jobs:
           username: ${{ secrets.VM_OS }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            cd /home/ubuntu/your-project-folder
+            cd /home/ubuntu/Webrtcteachingplatform
             git pull origin main
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
