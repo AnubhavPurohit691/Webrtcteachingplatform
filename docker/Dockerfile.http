@@ -1,0 +1,23 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml turbo.json ./
+
+COPY ./apps/http/package.json ./apps/http/package.json
+
+COPY . .
+
+RUN npm install -g pnpm
+
+RUN pnpm install 
+
+WORKDIR /app/packages/db
+
+RUN pnpx prisma generate 
+
+WORKDIR /app/apps/http
+
+EXPOSE 3001
+
+CMD [ "pnpm","dev" ]

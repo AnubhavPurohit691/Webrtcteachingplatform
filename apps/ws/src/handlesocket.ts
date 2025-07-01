@@ -1,12 +1,13 @@
 import { prismaClient } from "@repo/db/db";
 import { CustomWebSocket, users } from ".";
 import { Kafka } from "kafkajs";
+import dotenv from "dotenv";
 import { Player } from "./Player";
-import {  pub} from "./connectredis";
-
+import { pub } from "./connectredis";
+dotenv.config()
 const kafka = new Kafka({
   clientId: "TeachingApp",
-  brokers: ["localhost:9092"],
+  brokers: [process.env.kafkaprocess||"kafka:9092"],
 });
 
 const producer = kafka.producer();
@@ -17,8 +18,6 @@ function setup() {
     console.log("✅ Kafka connected");
   });
 }
-
-
 
 // Call setup once when the module is loaded
 setup();
@@ -63,7 +62,7 @@ export async function handlesocket(message: string, ws: CustomWebSocket) {
           JSON.stringify({
             type: "joined",
             admin: adminuser?.userId === ws.userid,
-          })
+          }),
         );
       } else {
         if (!ws.userid) return ws.close();
@@ -79,7 +78,7 @@ export async function handlesocket(message: string, ws: CustomWebSocket) {
           JSON.stringify({
             type: "joined",
             admin: adminuser?.userId === ws.userid,
-          })
+          }),
         );
 
         console.log(`User ${ws.userid} joined room ${data.roomid}`);
@@ -93,11 +92,12 @@ export async function handlesocket(message: string, ws: CustomWebSocket) {
     case "drawing":
     case "text":
     case "circle":
+    case "erase":
     case "arrow": {
       const sender = users.find((user) => user.userid === ws.userid);
       if (sender && sender.isAdmin) {
-        console.log(data)
-        await pub.publish(data.roomid.toString(), JSON.stringify(data)); 
+        console.log(data);
+        await pub.publish(data.roomid.toString(), JSON.stringify(data));
       }
       break;
     }

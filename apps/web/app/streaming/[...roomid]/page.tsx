@@ -2,7 +2,6 @@
 import {
   Canvas,
   Circle,
-  FabricObject,
   Group,
   IText,
   Line,
@@ -56,7 +55,6 @@ const Canvapage = ({ params }: { params: Promise<{ roomid: string }> }) => {
         JSON.stringify({
           type: "streaming",
           roomid: roomid.toString(),
-          action: "play",
         }),
       );
     };
@@ -173,6 +171,38 @@ const Canvapage = ({ params }: { params: Promise<{ roomid: string }> }) => {
   return (
     <div className="w-full h-screen relative">
       <canvas ref={Canvaref} />
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 h-12 bg-white  rounded-2xl  items-center gap-2 px-4 shadow-lg flex justify-between">
+        <button
+          className="p-2 hover:bg-gray-400 bg-black text-white rounded-lg transition-colors"
+          onClick={() => {
+            if (!socket || !canvas) return;
+            socket.send(
+              JSON.stringify({
+                type: "streaming",
+                roomid: roomid.toString(),
+                action: "play",
+              }),
+            );
+          }}
+        >
+          Play
+        </button>
+        <button
+          className="p-2 hover:bg-gray-400 bg-black text-white rounded-lg transition-colors"
+          onClick={() => {
+            if (!socket || !canvas) return;
+            socket.send(
+              JSON.stringify({
+                type: "streaming",
+                roomid: roomid.toString(),
+                action: "pause",
+              }),
+            );
+          }}
+        >
+          Pause
+        </button>
+      </div>
     </div>
   );
 };
