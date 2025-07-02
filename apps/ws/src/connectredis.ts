@@ -2,9 +2,10 @@ import { createClient, RedisClientType } from "redis";
 import { users } from ".";
 import dotenv from "dotenv"
 dotenv.config()
+console.log(process.env.Redisprocess)
 
 export const pub: RedisClientType = createClient({
-  url: process.env.Redisprocess||"",
+  url: process.env.Redisprocess||"redis://localhost:6379",
 });
 export const sub: RedisClientType = pub.duplicate();
 

@@ -64,9 +64,10 @@ export default function Dashboard() {
   const [rooms, setRooms] = useState<Room[]>([]);
 
   const fetchRooms = async () => {
+    console.log(process.env.NEXT_PUBLIC_API_URL )
     try {
       setIsLoading(true);
-      const response = await axios.get(process.env.BackendUrl + "/getrooms", {
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL + "/getrooms", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -91,7 +92,7 @@ export default function Dashboard() {
     setIsCreating(true);
     try {
       const response = await axios.post(
-        process.env.BackendUrl + "/createroom",
+        process.env.NEXT_PUBLIC_API_URL + "/createroom",
         {
           roomname: roomName.trim(),
         },

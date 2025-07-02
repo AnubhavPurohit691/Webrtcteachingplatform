@@ -48,8 +48,8 @@ export default function AuthPage() {
     setMessage("");
 
     const endpoint = isSignup
-      ? process.env.BackendUrl + "/signup"
-      : process.env.BackendUrl + "/signin";
+      ? process.env.NEXT_PUBLIC_API_URL + "/signup"
+      : process.env.NEXT_PUBLIC_API_URL + "/signin";
     const payload = isSignup
       ? { username: form.username, email: form.email, password: form.password }
       : { email: form.email, password: form.password };

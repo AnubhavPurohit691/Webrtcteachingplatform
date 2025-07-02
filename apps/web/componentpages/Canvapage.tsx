@@ -93,7 +93,6 @@ const Canvapage = ({ roomid }: { roomid: string }) => {
         const newtimestamp = Date.now();
         obj?.set("timestamp", newtimestamp);
         if (obj) {
-          console.log(Recording);
           // Send only serializable properties
           if (Recording) {
             socket.send(
@@ -135,6 +134,7 @@ const Canvapage = ({ roomid }: { roomid: string }) => {
     socket.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data);
+        console.log("Received data:", data);
         switch (data.type) {
           case "rectangle":
             const rect = new Rect(data.data);
