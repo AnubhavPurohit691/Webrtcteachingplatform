@@ -48,8 +48,8 @@ export default function AuthPage() {
     setMessage("");
 
     const endpoint = isSignup
-      ? "http://localhost:3001/signup"
-      : "http://localhost:3001/signin";
+      ? process.env.BackendUrl + "/signup"
+      : process.env.BackendUrl + "/signin";
     const payload = isSignup
       ? { username: form.username, email: form.email, password: form.password }
       : { email: form.email, password: form.password };

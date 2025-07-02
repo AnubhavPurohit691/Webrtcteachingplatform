@@ -66,7 +66,7 @@ export default function Dashboard() {
   const fetchRooms = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get("http://localhost:3001/getrooms", {
+      const response = await axios.get(process.env.BackendUrl + "/getrooms", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export default function Dashboard() {
     setIsCreating(true);
     try {
       const response = await axios.post(
-        "http://localhost:3001/createroom",
+        process.env.BackendUrl + "/createroom",
         {
           roomname: roomName.trim(),
         },

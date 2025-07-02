@@ -1,10 +1,10 @@
-import { prismaClient } from "@repo/db/db";
 import { createClient, RedisClientType } from "redis";
 import { users } from ".";
-import { Player } from "./Player";
+import dotenv from "dotenv"
+dotenv.config()
 
 export const pub: RedisClientType = createClient({
-  url: "redis://redis:6379",
+  url: process.env.Redisprocess||"",
 });
 export const sub: RedisClientType = pub.duplicate();
 
