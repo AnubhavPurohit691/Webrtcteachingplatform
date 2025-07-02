@@ -26,15 +26,9 @@ CanvasCraft is a **real-time collaborative whiteboard application** inspired by 
 | Messaging       | Apache Kafka                     |
 | Backend         | Node.js, Express                 |
 | State Handling  | Kafka Streams, Redis             |
-
-https://github.com/user-attachments/assets/e990fd36-ad57-48b4-a2e5-813b79a12cc1
-
-
 | Containerization| Docker, Docker Compose           |
 
 ---
-
-
 
 https://github.com/user-attachments/assets/c3e3717b-345a-4d53-bc34-d61f20764452
 
