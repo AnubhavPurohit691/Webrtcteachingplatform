@@ -1,3 +1,5 @@
+https://github.com/user-attachments/assets/c3e3717b-345a-4d53-bc34-d61f20764452
+
 # 🧠 CanvasCraft
 
 CanvasCraft is a **real-time collaborative whiteboard application** inspired by [Excalidraw](https://excalidraw.com/), built with a distributed system architecture. It supports **live multi-user drawing** with **streaming powered by Apache Kafka** for high-performance real-time updates.
@@ -30,5 +32,5 @@ CanvasCraft is a **real-time collaborative whiteboard application** inspired by 
 
 ---
 
-https://github.com/user-attachments/assets/c3e3717b-345a-4d53-bc34-d61f20764452
+
 
