@@ -23,7 +23,7 @@ CanvasCraft is a **real-time collaborative whiteboard application** inspired by 
 
 | Area            | Tech                             |
 |-----------------|----------------------------------|
-| Frontend        | React, TypeScript, Zustand       |
+| Frontend        | React, TypeScript                |
 | Real-time Comm  | WebSockets                       |
 | Messaging       | Apache Kafka                     |
 | Backend         | Node.js, Express                 |
